@@ -66,7 +66,7 @@ const handleClick = () => {
 <style scoped>
 .card {
   width: 80px;
-  height: 120px;
+  height: 15.5vh;
   border: 3px solid #333;
   border-radius: 8px;
   background-color: white;
@@ -104,38 +104,35 @@ const handleClick = () => {
 }
 
 .card-back {
-  /* transform: rotateY(180deg); */
   background: url('../assets/card-back.png') center no-repeat #1a1a1a;
   background-size: cover;
   /* background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%); */
   width: 100%;
   height: 100%;
-  /* border: 2px solid #666; */
   align-items: center;
   justify-content: center;
   color: #000000;
 }
-
-/* .card:hover {
-  transform: translateY(-5px);
-} */
 
 .card.held {
   position: relative;
   border: 3px solid #ffc107;
   /* transform: translateY(-10px); */
   box-shadow: 0px 10px 15px rgba(255, 193, 7, 0.4);
+  background-color: #ededc9;
 }
 
 .card.held:after {
   content: 'HOLD';
   position: relative;
-  font-size: 24px;
+  font-size: 100%;
   font-weight: bold;
   color: red;
+  /* background-color: #fff; */
+  padding: 0 4px;
   align-self: center;
   justify-self: center;
-  top: -65%;
+  top: -60%;
   left: 0;
   width: 100%;
   height: 100%;

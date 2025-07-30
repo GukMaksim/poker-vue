@@ -50,15 +50,7 @@
 			</div>
 		</div>
 
-		<!-- Інформація про подвоєння -->
-		<div v-if="gameState === 'doubling' || gameState === 'double-won'" class="double-info">
-			<p v-if="gameState === 'doubling'">Виберіть карту, яка більша за {{ revealedCard.rank }}{{ revealedCard.suit }}
-			</p>
-			<p v-if="gameState === 'double-won'">Виберіть дію для виграшу ${{ currentWinnings }}</p>
-			<p>Можливий виграш: ${{ currentWinnings }}</p>
-		</div>
-
-		<!--     <footer class="payout-table">
+		    <footer class="payout-table">
 			<h3>Таблиця виплат (ставка {{ BET_AMOUNT }})</h3>
 			<ul>
 				<li v-for="([combo, multiplier]) in Object.entries(PAYOUTS)" :key="combo">
@@ -66,7 +58,7 @@
 					<span>${{ multiplier * BET_AMOUNT }}</span>
 				</li>
 			</ul>
-		</footer> -->
+		</footer>
 	</div>
 </template>
 
@@ -224,7 +216,7 @@ const handleDealDraw = () => {
 			if (result) {
 				const payout = PAYOUTS[result] * BET_AMOUNT;
 				currentWinnings.value = payout;
-				message.value = `Вітаємо! У вас ${result}. Виграш: ${payout}`;
+				message.value = `Вітаємо! У вас ${result}. Виграш: $${payout}`;
 				gameState.value = 'won';
 			} else {
 				message.value = 'Цього разу не пощастило. Спробуйте ще!';
@@ -263,7 +255,7 @@ const startDouble = () => {
 	}
 
 	gameState.value = 'doubling';
-	message.value = `Відкрита карта: ${revealedCard.value.rank}${revealedCard.value.suit}. Виберіть карту більшу за неї!`;
+	message.value = `Можливий виграш: $${ currentWinnings.value * 2 }. Оберіть карту`;
 };
 
 const selectCard = (index) => {
@@ -283,7 +275,7 @@ const selectCard = (index) => {
 
 		// Пропонуємо подвоїти ще раз або забрати
 		setTimeout(() => {
-			message.value = 'Бажаєте подвоїти ще раз або забрати виграш?';
+			message.value = `Ваш виграш: $${ currentWinnings.value }. Подвоїти до $${currentWinnings.value * 2}?`;
 		}, 2000);
 
 	} else if (comparison < 0) {
@@ -292,14 +284,6 @@ const selectCard = (index) => {
 		message.value = `На жаль! ${selectedCard.rank}${selectedCard.suit} менша за ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш втрачено.`;
 		gameState.value = 'ready'; //TODO: DELETE IT
 		
-
-		/* setTimeout(() => {
-			gameState.value = 'ready';
-			hand.fill(null);
-			currentWinnings.value = 0;
-			message.value = 'Натисніть "Роздати", щоб почати!';
-		}, 2000); */
-
 	} else {
 		// Нічия - залишаємо поточний виграш
 		message.value = `Нічия! ${selectedCard.rank}${selectedCard.suit} дорівнює ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш залишається: $${currentWinnings.value}`;
@@ -354,21 +338,23 @@ body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	min-height: 100vh;
 	margin: 0;
 }
 
 #app-container {
-	width: 100%;
+	width: 100vw;
 	max-width: 500px;
+	height: 100vh;
 	background-color: #001a00;
 	border-radius: 15px;
-	padding: 20px;
+	padding: 10px;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+	box-sizing: border-box;
 }
 
 .header {
@@ -381,6 +367,10 @@ body {
 	margin: 0;
 }
 
+/* footer {
+	margin: auto 0 1em;
+} */
+
 .balance {
 	font-size: 1.2em;
 	font-weight: bold;
@@ -388,6 +378,7 @@ body {
 
 .message-board {
 	background-color: rgba(0, 0, 0, 0.3);
+	border: #ffc107 1px solid;
 	padding: 15px;
 	border-radius: 8px;
 	text-align: center;
@@ -399,12 +390,12 @@ body {
 	display: flex;
 	justify-content: center;
 	gap: 10px;
-	min-height: 120px;
+	min-height: 100px;
 }
 
 .card-placeholder {
 	width: 80px;
-	height: 120px;
+	height: 15vh;
 	border: 2px dashed #444;
 	border-radius: 8px;
 }
@@ -484,26 +475,31 @@ body {
 
 .payout-table {
 	background-color: rgba(0, 0, 0, 0.2);
-	padding: 15px;
-	border-radius: 8px;
+	margin: auto 0 0;
+	padding: 10px;
+	border: #ffc107 1px solid;
 }
 
 .payout-table h3 {
 	text-align: center;
-	margin-top: 0;
+	margin: 0 0 0.7em 0;
+	font-size: 1em;
 }
 
 .payout-table ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 1.5em;
 }
 
 .payout-table li {
 	display: flex;
 	justify-content: space-between;
-	padding: 5px 0;
 	border-bottom: 1px solid #444;
+	font-size: 0.8em;;
 }
 
 .payout-table li:last-child {
