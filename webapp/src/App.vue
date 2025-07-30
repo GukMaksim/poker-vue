@@ -55,7 +55,7 @@
 			<p v-if="gameState === 'doubling'">Виберіть карту, яка більша за {{ revealedCard.rank }}{{ revealedCard.suit }}
 			</p>
 			<p v-if="gameState === 'double-won'">Виберіть дію для виграшу ${{ currentWinnings }}</p>
-			<p>Виграш: ${{ currentWinnings }}</p>
+			<p>Можливий виграш: ${{ currentWinnings }}</p>
 		</div>
 
 		<!--     <footer class="payout-table">
@@ -171,7 +171,7 @@ const handleDealDraw = () => {
 						flippedCards.value.delete(index);
 					}, 100);
 				}, 300);
-			}, index * 500); // Затримка між картами
+			}, index * 300); // Затримка між картами
 		});
 
 		// Оновлюємо повідомлення після завершення анімації
@@ -223,7 +223,6 @@ const handleDealDraw = () => {
 			const result = evaluateHand(hand);
 			if (result) {
 				const payout = PAYOUTS[result] * BET_AMOUNT;
-				// balance.value += payout;
 				currentWinnings.value = payout;
 				message.value = `Вітаємо! У вас ${result}. Виграш: ${payout}`;
 				gameState.value = 'won';
@@ -291,13 +290,15 @@ const selectCard = (index) => {
 		// Програш - втрачаємо все
 		currentWinnings.value = 0;
 		message.value = `На жаль! ${selectedCard.rank}${selectedCard.suit} менша за ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш втрачено.`;
+		gameState.value = 'ready'; //TODO: DELETE IT
+		
 
-		setTimeout(() => {
+		/* setTimeout(() => {
 			gameState.value = 'ready';
 			hand.fill(null);
 			currentWinnings.value = 0;
 			message.value = 'Натисніть "Роздати", щоб почати!';
-		}, 2000);
+		}, 2000); */
 
 	} else {
 		// Нічия - залишаємо поточний виграш
