@@ -85,7 +85,7 @@ const hand = reactive(Array(5).fill(null));
 const held = reactive(Array(5).fill(false));
 const balance = ref(STARTING_BALANCE);
 const gameState = ref('ready'); // 'ready', 'dealt', 'finished', 'won', 'doubling', 'double-won'
-const message = ref('Натисніть "Роздати", щоб почати!');
+const message = ref('Натисніть "Deal", щоб почати!');
 
 // Стан для подвоєння
 const currentWinnings = ref(0);
@@ -307,7 +307,7 @@ const selectCard = (index) => {
 			gameState.value = 'ready';
 			hand.fill(null);
 			message.value = 'Натисніть "Роздати", щоб почати!';
-		}, 100);
+		}, 2000);
 	}
 };
 

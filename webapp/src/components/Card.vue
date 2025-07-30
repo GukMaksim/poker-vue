@@ -104,12 +104,16 @@ const handleClick = () => {
 }
 
 .card-back {
-  transform: rotateY(180deg);
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
-  border: 2px solid #666;
+  /* transform: rotateY(180deg); */
+  background: url('../assets/card-back.png') center no-repeat #1a1a1a;
+  background-size: cover;
+  /* background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%); */
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid #666; */
   align-items: center;
   justify-content: center;
-  color: #ff6b6b;
+  color: #000000;
 }
 
 /* .card:hover {
@@ -142,14 +146,9 @@ const handleClick = () => {
   border: 2px solid #666;
 }
 
-.card.card-selectable {
-  border: 3px solid #ff6b6b;
-  box-shadow: 0px 5px 15px rgba(255, 107, 107, 0.4);
-}
-
 .card.card-selectable:hover {
-  transform: translateY(-8px);
-  box-shadow: 0px 8px 20px rgba(255, 107, 107, 0.6);
+  /* transform: translateY(-8px); */
+  box-shadow: 0px 10px 10px rgb(255 193 7);
 }
 
 .card .rank {
