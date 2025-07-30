@@ -19,6 +19,21 @@ export function shuffleDeck(deck) {
   return deck;
 }
 
+// Отримання значення карти
+export function getCardValue(card) {
+  return RANK_VALUES[card.rank];
+}
+
+// Порівняння двох карт
+export function compareCards(card1, card2) {
+  const value1 = getCardValue(card1);
+  const value2 = getCardValue(card2);
+  
+  if (value1 > value2) return 1;  // card1 більша
+  if (value1 < value2) return -1; // card2 більша
+  return 0; // карти рівні
+}
+
 // Таблиця виплат (коефіцієнти)
 export const PAYOUTS = {
   "Роял Флеш": 250,
@@ -29,7 +44,7 @@ export const PAYOUTS = {
   "Стріт": 4,
   "Трійка": 3,
   "Дві пари": 2,
-  "Пара": 1,
+  "Пара (Валети і вище)": 1,
 };
 
 // Функція для перевірки комбінацій
@@ -54,7 +69,10 @@ export function evaluateHand(hand) {
   if (isStraight || isAceLowStraight) return "Стріт";
   if (counts[0] === 3) return "Трійка";
   if (counts[0] === 2 && counts[1] === 2) return "Дві пари";
-  if (counts[0] === 2 && (ranks.some(r => r >= 4))) return "Пара";
+  const pairs = Object.entries(rankCounts)
+  .filter(([rank, count]) => count === 2)
+  .map(([rank]) => Number(rank));
+  if (counts[0] === 2 && pairs.some(r => r >= 11)) return "Пара (Валети і вище)";
 
   return null; // Немає комбінації
 }
