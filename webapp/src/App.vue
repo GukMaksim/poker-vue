@@ -10,11 +10,6 @@
 			</ul>
 		</header>
 
-		<div>
-			<!-- <h1>Pocker Machine</h1> -->
-			<div class="balance">Balance: {{ balance }}</div>
-		</div>
-
 		<div class="message-board">
 			{{ message }}
 		</div>
@@ -26,6 +21,11 @@
 					:is-flipped="isCardFlipped(index)" @toggle-hold="toggleHold(index)" @card-select="selectCard(index)" />
 				<div v-else class="card-placeholder" />
 			</template>
+		</div>
+
+		<div class="balance-container">
+			<div>BET {{ BET_AMOUNT }}</div>
+			<div class="balance">CREDITS {{ balance }}</div>
 		</div>
 
 		<div class="controls">
@@ -79,7 +79,7 @@ const hand = reactive(Array(5).fill(null));
 const held = reactive(Array(5).fill(false));
 const balance = ref(STARTING_BALANCE);
 const gameState = ref('ready'); // 'ready', 'dealt', 'finished', 'won', 'doubling', 'double-won'
-const message = ref('Натисніть "Deal", щоб почати!');
+const message = ref('press DRAW to start');
 
 // Стан для подвоєння
 const currentWinnings = ref(0);
@@ -149,7 +149,7 @@ const handleDealDraw = () => {
 		flippingCards.value.clear();
 		flippedCards.value.clear();
 		gameState.value = 'dealt';
-		message.value = 'Роздаю карти...';
+		message.value = 'dealing cards...';
 
 		// Анімація відкриття карт по черзі
 		newHand.forEach((card, index) => {
@@ -170,7 +170,7 @@ const handleDealDraw = () => {
 
 		// Оновлюємо повідомлення після завершення анімації
 		setTimeout(() => {
-			message.value = 'Виберіть карти для утримання';
+			message.value = 'Choose cards to hold';
 		}, newHand.length * 300 + 400);
 
 	} else if (gameState.value === 'dealt') {
@@ -218,10 +218,10 @@ const handleDealDraw = () => {
 			if (result) {
 				const payout = PAYOUTS[result] * BET_AMOUNT;
 				currentWinnings.value = payout;
-				message.value = `Вітаємо! У вас ${result}. Виграш: $${payout}`;
+				message.value = `${result}`;
 				gameState.value = 'won';
 			} else {
-				message.value = 'Цього разу не пощастило. Спробуйте ще!';
+				message.value = 'YOU LOSE';
 			}
 		}, cardsToReplace.length * 200 + 600); // Затримка для всіх анімацій
 	} else if (gameState.value === 'finished') {
@@ -230,7 +230,7 @@ const handleDealDraw = () => {
 		hand.fill(null);
 		flippingCards.value.clear();
 		flippedCards.value.clear();
-		message.value = 'Натисніть "Роздати", щоб почати!';
+		message.value = 'press DRAW to start';
 	}
 };
 
@@ -257,7 +257,7 @@ const startDouble = () => {
 	}
 
 	gameState.value = 'doubling';
-	message.value = `Можливий виграш: $${ currentWinnings.value * 2 }. Оберіть карту`;
+	message.value = `You can win: ${currentWinnings.value * 2}. Choose a card.`;
 };
 
 const selectCard = (index) => {
@@ -270,22 +270,22 @@ const selectCard = (index) => {
 	if (comparison > 0) {
 		// Виграш - подвоюємо
 		currentWinnings.value *= 2;
-		message.value = `Вітаємо! ${selectedCard.rank}${selectedCard.suit} більша за ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш подвоєно: $${currentWinnings.value}`;
+		message.value = `YOU WIN ${currentWinnings.value}!`;
 
 		// Переходимо до стану вибору дії
 		gameState.value = 'double-won';
 
 		// Пропонуємо подвоїти ще раз або забрати
 		setTimeout(() => {
-			message.value = `Ваш виграш: $${ currentWinnings.value }. Подвоїти до $${currentWinnings.value * 2}?`;
+			message.value = `your winnings: ${currentWinnings.value}. Double to ${currentWinnings.value * 2}?`;
 		}, 2000);
 
 	} else if (comparison < 0) {
 		// Програш - втрачаємо все
 		currentWinnings.value = 0;
-		message.value = `На жаль! ${selectedCard.rank}${selectedCard.suit} менша за ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш втрачено.`;
+		message.value = `YOU LOSE`;
 		gameState.value = 'ready'; //TODO: DELETE IT
-		
+
 	} else {
 		// Нічия - залишаємо поточний виграш
 		message.value = `Нічия! ${selectedCard.rank}${selectedCard.suit} дорівнює ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш залишається: $${currentWinnings.value}`;
@@ -293,7 +293,7 @@ const selectCard = (index) => {
 		setTimeout(() => {
 			gameState.value = 'ready';
 			hand.fill(null);
-			message.value = 'Натисніть "Роздати", щоб почати!';
+			message.value = 'press DRAW to start';
 		}, 2000);
 	}
 };
@@ -306,7 +306,7 @@ const collectWinnings = () => {
 		gameState.value = 'ready';
 		hand.fill(null);
 		currentWinnings.value = 0;
-		message.value = 'Натисніть "Роздати", щоб почати!';
+		message.value = 'press DRAW to start';
 	}, 100);
 };
 
@@ -334,6 +334,7 @@ const continueDouble = () => {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 /* Глобальні стилі - можна винести в окремий css файл, але для простоти залишимо тут */
 body {
 	background-color: #0d3b0d;
@@ -366,18 +367,27 @@ body {
 	padding-bottom: 10px;
 }
 
-.balance {
-	font-size: 1.2em;
+.balance-container {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 10px;
+	color: red;
+	font-size: 2em;
 	font-weight: bold;
+	text-shadow: -2px -2px 0 #ffc107, 2px -2px 0 #ffc107, -2px 2px 0 #ffc107, 2px 2px 0 #ffc107;
+}
+
+.balance {
+	
 }
 
 .message-board {
-	background-color: rgba(0, 0, 0, 0.3);
-	border: #ffc107 1px solid;
 	padding: 15px;
-	border-radius: 8px;
 	text-align: center;
-	font-size: 1.1em;
+	color: red;
+	font-size: 2em;
+	font-weight: bold;
+	text-shadow: -2px -2px 0 #ffc107, 2px -2px 0 #ffc107, -2px 2px 0 #ffc107, 2px 2px 0 #ffc107;
 	min-height: 50px;
 }
 
@@ -496,7 +506,8 @@ body {
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid #444;
-	font-size: 0.8em;;
+	font-size: 0.8em;
+	;
 }
 
 .payout-table li:last-child {
