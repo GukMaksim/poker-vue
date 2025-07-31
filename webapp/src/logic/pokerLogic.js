@@ -36,15 +36,15 @@ export function compareCards(card1, card2) {
 
 // Таблиця виплат (коефіцієнти)
 export const PAYOUTS = {
-  "Роял Флеш": 250,
-  "Стріт Флеш": 50,
-  "Каре": 25,
-  "Фул-Хаус": 9,
-  "Флеш": 6,
-  "Стріт": 4,
-  "Трійка": 3,
-  "Дві пари": 2,
-  "Пара (Валети і вище)": 1,
+  "ROYAL FLUSH": 250,
+  "STRAIGHT FLUSH": 50,
+  "FOUR OF A KIND": 25,
+  "FULL HOUSE": 9,
+  "FLUSH": 6,
+  "STRAIGHT": 4,
+  "THREE OF A KIND": 3,
+  "TWO PAIR": 2,
+  "JACKS OR BETTER": 1,
 };
 
 // Функція для перевірки комбінацій
@@ -61,18 +61,18 @@ export function evaluateHand(hand) {
   const isStraight = ranks[4] - ranks[0] === 4 && new Set(ranks).size === 5;
   const isAceLowStraight = JSON.stringify(ranks) === JSON.stringify([2, 3, 4, 5, 14]);
 
-  if (isStraight && isFlush && ranks[4] === 14) return "Роял Флеш";
-  if ((isStraight || isAceLowStraight) && isFlush) return "Стріт Флеш";
-  if (counts[0] === 4) return "Каре";
-  if (counts[0] === 3 && counts[1] === 2) return "Фул-Хаус";
-  if (isFlush) return "Флеш";
-  if (isStraight || isAceLowStraight) return "Стріт";
-  if (counts[0] === 3) return "Трійка";
-  if (counts[0] === 2 && counts[1] === 2) return "Дві пари";
+  if (isStraight && isFlush && ranks[4] === 14) return "ROYAL FLUSH";
+  if ((isStraight || isAceLowStraight) && isFlush) return "STRAIGHT FLUSH";
+  if (counts[0] === 4) return "FOUR OF A KIND";
+  if (counts[0] === 3 && counts[1] === 2) return "FULL HOUSE";
+  if (isFlush) return "FLUSH";
+  if (isStraight || isAceLowStraight) return "STRAIGHT";
+  if (counts[0] === 3) return "THREE OF A KIND";
+  if (counts[0] === 2 && counts[1] === 2) return "TWO PAIR";
   const pairs = Object.entries(rankCounts)
   .filter(([rank, count]) => count === 2)
   .map(([rank]) => Number(rank));
-  if (counts[0] === 2 && pairs.some(r => r >= 11)) return "Пара (Валети і вище)";
+  if (counts[0] === 2 && pairs.some(r => r >= 11)) return "JACKS OR BETTER";
 
   return null; // Немає комбінації
 }

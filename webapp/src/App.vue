@@ -1,9 +1,19 @@
 <template>
 	<div id="app-container">
-		<header class="header">
-			<h1>Pocker Machine</h1>
-			<div class="balance">Balance: ${{ balance }}</div>
+		<header class="payout-table">
+			<!-- <h3>Таблиця виплат (ставка {{ BET_AMOUNT }})</h3> -->
+			<ul>
+				<li v-for="([combo, multiplier]) in Object.entries(PAYOUTS)" :key="combo">
+					<span>{{ combo }}</span>
+					<span>{{ multiplier * BET_AMOUNT }}</span>
+				</li>
+			</ul>
 		</header>
+
+		<div>
+			<!-- <h1>Pocker Machine</h1> -->
+			<div class="balance">Balance: {{ balance }}</div>
+		</div>
 
 		<div class="message-board">
 			{{ message }}
@@ -50,15 +60,7 @@
 			</div>
 		</div>
 
-		    <footer class="payout-table">
-			<h3>Таблиця виплат (ставка {{ BET_AMOUNT }})</h3>
-			<ul>
-				<li v-for="([combo, multiplier]) in Object.entries(PAYOUTS)" :key="combo">
-					<span>{{ combo }}</span>
-					<span>${{ multiplier * BET_AMOUNT }}</span>
-				</li>
-			</ul>
-		</footer>
+
 	</div>
 </template>
 
@@ -331,11 +333,12 @@ const continueDouble = () => {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
 /* Глобальні стилі - можна винести в окремий css файл, але для простоти залишимо тут */
 body {
 	background-color: #0d3b0d;
 	color: white;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
@@ -347,7 +350,7 @@ body {
 	width: 100vw;
 	max-width: 500px;
 	height: 100vh;
-	background-color: #001a00;
+	background-color: #0025aa;
 	border-radius: 15px;
 	padding: 10px;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -362,14 +365,6 @@ body {
 	border-bottom: 2px solid #ffc107;
 	padding-bottom: 10px;
 }
-
-.header h1 {
-	margin: 0;
-}
-
-/* footer {
-	margin: auto 0 1em;
-} */
 
 .balance {
 	font-size: 1.2em;
@@ -396,7 +391,7 @@ body {
 .card-placeholder {
 	width: 80px;
 	height: 15vh;
-	border: 2px dashed #444;
+	border: 2px dashed #fff;
 	border-radius: 8px;
 }
 
@@ -474,10 +469,12 @@ body {
 }
 
 .payout-table {
-	background-color: rgba(0, 0, 0, 0.2);
-	margin: auto 0 0;
+	background-color: rgba(0, 0, 0, 0.7);
+	margin: 0;
 	padding: 10px;
 	border: #ffc107 1px solid;
+	color: #ffc107;
+	font-weight: bold;
 }
 
 .payout-table h3 {

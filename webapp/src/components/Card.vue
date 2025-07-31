@@ -13,7 +13,10 @@
   >
     <div class="card-inner">
       <div class="card-front" v-if="!isHidden">
-        <div class="rank">{{ rank }}</div>
+        <div class="rank">
+        <div>{{ rank }}</div>
+        <div>{{ suit }}</div>
+      </div>
         <div class="suit">{{ suit }}</div>
       </div>
       <div class="card-back" v-else>
@@ -67,7 +70,7 @@ const handleClick = () => {
 .card {
   width: 80px;
   height: 15.5vh;
-  border: 3px solid #333;
+  border: 1px solid #333;
   border-radius: 8px;
   background-color: white;
   cursor: pointer;
@@ -99,8 +102,9 @@ const handleClick = () => {
   flex-direction: column;
   justify-content: space-between;
   /* padding: 1px 4px; */
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 500;
 }
 
 .card-back {
@@ -116,7 +120,7 @@ const handleClick = () => {
 
 .card.held {
   position: relative;
-  border: 3px solid #ffc107;
+  border: 1px solid #ffc107;
   /* transform: translateY(-10px); */
   box-shadow: 0px 10px 15px rgba(255, 193, 7, 0.4);
   background-color: #ededc9;
@@ -126,13 +130,13 @@ const handleClick = () => {
   content: 'HOLD';
   position: relative;
   font-size: 100%;
-  font-weight: bold;
-  color: red;
+  font-weight: 300;
+  color: #fff;
   /* background-color: #fff; */
   padding: 0 4px;
   align-self: center;
   justify-self: center;
-  top: -60%;
+  top: -120%;
   left: 0;
   width: 100%;
   height: 100%;
@@ -150,12 +154,14 @@ const handleClick = () => {
 
 .card .rank {
   align-self: flex-start;
-  padding-left: 8px;
+  padding-left: 5px;
+  padding-top: 3px;
+  line-height: 0.9;
 }
 
 .card .suit {
-  align-self: flex-end;
-  padding-right: 8px;
+  align-self: center;
+  font-size: 48px;
 }
 
 .card-back-pattern {
