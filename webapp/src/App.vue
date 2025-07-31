@@ -3,7 +3,7 @@
 		<header class="payout-table">
 			<!-- <h3>Таблиця виплат (ставка {{ BET_AMOUNT }})</h3> -->
 			<ul>
-				<li v-for="([combo, multiplier]) in Object.entries(PAYOUTS)" :key="combo">
+				<li v-for="([combo, multiplier]) in Object.entries(PAYOUTS)" :key="combo" :class="{ 'highlight-combo': combo === winningCombo }">
 					<span>{{ combo }}</span>
 					<span>{{ multiplier * BET_AMOUNT }}</span>
 				</li>
@@ -80,6 +80,7 @@ const held = reactive(Array(5).fill(false));
 const balance = ref(STARTING_BALANCE);
 const gameState = ref('ready'); // 'ready', 'dealt', 'finished', 'won', 'doubling', 'double-won'
 const message = ref('press DRAW to start');
+const winningCombo = ref(null);
 
 // Стан для подвоєння
 const currentWinnings = ref(0);
@@ -220,6 +221,7 @@ const handleDealDraw = () => {
 				currentWinnings.value = payout;
 				message.value = `${result}`;
 				gameState.value = 'won';
+				winningCombo.value = result;
 			} else {
 				message.value = 'YOU LOSE';
 			}
@@ -257,7 +259,7 @@ const startDouble = () => {
 	}
 
 	gameState.value = 'doubling';
-	message.value = `You can win: ${currentWinnings.value * 2}. Choose a card.`;
+	message.value = `choose a card higher than ${revealedCard.value.rank}`;
 };
 
 const selectCard = (index) => {
@@ -270,19 +272,20 @@ const selectCard = (index) => {
 	if (comparison > 0) {
 		// Виграш - подвоюємо
 		currentWinnings.value *= 2;
-		message.value = `YOU WIN ${currentWinnings.value}!`;
+		message.value = `YOU WIN ${currentWinnings.value} !`;
 
 		// Переходимо до стану вибору дії
 		gameState.value = 'double-won';
 
 		// Пропонуємо подвоїти ще раз або забрати
 		setTimeout(() => {
-			message.value = `your winnings: ${currentWinnings.value}. Double to ${currentWinnings.value * 2}?`;
+			message.value = `Double to ${currentWinnings.value * 2} ?`;
 		}, 2000);
 
 	} else if (comparison < 0) {
 		// Програш - втрачаємо все
 		currentWinnings.value = 0;
+		winningCombo.value = null;
 		message.value = `YOU LOSE`;
 		gameState.value = 'ready'; //TODO: DELETE IT
 
@@ -291,9 +294,9 @@ const selectCard = (index) => {
 		message.value = `Нічия! ${selectedCard.rank}${selectedCard.suit} дорівнює ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш залишається: $${currentWinnings.value}`;
 
 		setTimeout(() => {
-			gameState.value = 'ready';
+			gameState.value = 'double-won';
 			hand.fill(null);
-			message.value = 'press DRAW to start';
+			message.value = 'Double to ${currentWinnings.value * 2}?';
 		}, 2000);
 	}
 };
@@ -306,6 +309,7 @@ const collectWinnings = () => {
 		gameState.value = 'ready';
 		hand.fill(null);
 		currentWinnings.value = 0;
+		winningCombo.value = null;
 		message.value = 'press DRAW to start';
 	}, 100);
 };
@@ -328,7 +332,7 @@ const continueDouble = () => {
 
 	// Повертаємося до стану подвоєння
 	gameState.value = 'doubling';
-	message.value = `Відкрита карта: ${revealedCard.value.rank}${revealedCard.value.suit}. Виберіть карту більшу за неї!`;
+	message.value = `choose a card higher than ${revealedCard.value.rank}`;
 };
 </script>
 
@@ -375,10 +379,6 @@ body {
 	font-size: 2em;
 	font-weight: bold;
 	text-shadow: -2px -2px 0 #ffc107, 2px -2px 0 #ffc107, -2px 2px 0 #ffc107, 2px 2px 0 #ffc107;
-}
-
-.balance {
-	
 }
 
 .message-board {
@@ -491,6 +491,14 @@ body {
 	text-align: center;
 	margin: 0 0 0.7em 0;
 	font-size: 1em;
+}
+
+.payout-table .highlight-combo {
+	color: #fff;
+	background: #d32f2f;
+  font-weight: bold;
+  box-shadow: 0 0 8px #d32f2f;
+  transition: background 0.2s;
 }
 
 .payout-table ul {
