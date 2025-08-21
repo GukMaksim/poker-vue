@@ -20,7 +20,7 @@
         <div class="suit">{{ suit }}</div>
       </div>
       <div class="card-back" v-else>
-        <div class="card-back-pattern">♠</div>
+        <!-- <div class="card-back-pattern">♠</div> -->
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ const handleClick = () => {
 <style scoped>
 .card {
   width: 80px;
-  height: 15.5vh;
+  height: 15vh;
   border: 1px solid #333;
   border-radius: 8px;
   background-color: white;
@@ -101,7 +101,6 @@ const handleClick = () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* padding: 1px 4px; */
   font-size: 26px;
   line-height: 1;
   font-weight: 500;
@@ -110,7 +109,6 @@ const handleClick = () => {
 .card-back {
   background: url('../assets/card-back.png') center no-repeat #1a1a1a;
   background-size: cover;
-  /* background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%); */
   width: 100%;
   height: 100%;
   align-items: center;
@@ -132,7 +130,6 @@ const handleClick = () => {
   font-size: 100%;
   font-weight: 300;
   color: #fff;
-  /* background-color: #fff; */
   padding: 0 4px;
   align-self: center;
   justify-self: center;
@@ -164,8 +161,8 @@ const handleClick = () => {
   font-size: 48px;
 }
 
-.card-back-pattern {
+/* .card-back-pattern {
   font-size: 32px;
   opacity: 0.7;
-}
+} */
 </style>
