@@ -1,8 +1,12 @@
 <template>
-  <div class="balance-container">
-    <div class="currentWinnings">WIN {{ currentWinnings }}</div>
-    <div class="bet">BET {{ betAmount }}</div>
-    <div class="balance">CREDITS {{ balance }}</div>
+  <div class="balance-container-wrapper">
+    <div class="balance-container">
+      <div class="currentWinnings">WIN {{ currentWinnings }}</div>
+      <div class="balance">CREDITS {{ balance }}</div>
+    </div>
+    <div class="bet-container">
+      <div class="bet">BET {{ betAmount }}</div>
+    </div>
   </div>
 </template>
 
@@ -24,15 +28,17 @@ defineProps({
 </script>
 
 <style scoped>
-.balance-container {
+.balance-container,
+.bet-container {
   display: flex;
   justify-content: space-between;
   padding: 0 10px;
 
   font-size: 2em;
   font-weight: bold;
-
+  line-height: 1.2;
 }
+
 
 .currentWinnings {
   color: red;

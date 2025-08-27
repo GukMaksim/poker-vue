@@ -85,12 +85,12 @@ const handleMaxBet = () => {
 <style scoped>
 .button-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
   padding: 10px;
 }
 
-.controls button {
+/* .controls button {
   padding: 15px;
   font-size: 1.2em;
   font-weight: bold;
@@ -112,67 +112,57 @@ const handleMaxBet = () => {
   border-color: #666;
   color: #666;
   cursor: not-allowed;
-}
-
-.main-button {
-  background-color: #2c3e50 !important;
-}
-
-.double-button {
-  background-color: #c0392b !important;
-  border-color: #e74c3c !important;
-  color: #fff !important;
-}
-
-.double-button:hover:not(:disabled) {
-  background-color: #e74c3c !important;
-  color: #fff !important;
-}
-
-.bet-button {
-  background-color: #27ae60 !important;
-  border-color: #2ecc71 !important;
-  color: #fff !important;
-}
-
-.bet-button:hover:not(:disabled) {
-  background-color: #2ecc71 !important;
-  color: #fff !important;
-}
-
-/* color: white !important;
 } */
 
-.double-button:hover {
-  background-color: #ff5252 !important;
+.controls button {
+  --size: 96px; /* розмір кнопки */
+  --face: #f4f4f4; /* колір верхньої панелі */
+  --border: #111; /* корпус */
+  --shadow: #444; /* тінь */
+  --text: #111; /* напис */
+  --glow: #ffed4d; /* підсвітка */
+
+  inline-size: var(--size);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+
+  font: bold 18px/1.2 Arial, sans-serif;
+  text-transform: uppercase;
+  color: var(--text);
+
+  background: var(--face);
+  border: 4px solid var(--border);
+  border-radius: 6px;
+  box-shadow:
+    0 2px 0 var(--shadow) inset,
+    0 6px 10px rgba(0, 0, 0, 0.6),
+    0 0 12px 2px var(--glow);
+  cursor: pointer;
+  user-select: none;
+  transition: transform .1s, box-shadow .2s, filter .2s;
 }
 
-.double-controls {
-  display: flex;
-  gap: 10px;
+.controls button::before {}
+
+.controls button:hover:not(:disabled) {}
+
+.controls button:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 var(--shadow) inset,
+    0 3px 6px rgba(0, 0, 0, 0.6),
+    0 0 6px 1px var(--glow);
 }
 
-.double-controls button {
-  flex: 1;
-  font-size: 1.2em;
-  padding: 12px;
-}
-
-.collect-button {
-  background-color: #4caf50 !important;
-  color: white !important;
-}
-
-.collect-button:hover {
-  background-color: #45a049 !important;
-}
-
-.continue-double-button {
-  background-color: #ff9800 !important;
-  color: white !important;
-}
-
-.continue-double-button:hover {
-  background-color: #f57c00 !important;
+.controls button:disabled {
+  background: #bbb;
+  color: #666;
+  border-color: #444;
+  cursor: not-allowed;
+  box-shadow:
+    0 2px 0 #555 inset,
+    0 4px 6px rgba(0, 0, 0, 0.5);
+  filter: grayscale(0.5) brightness(0.9);
 }
 </style>
