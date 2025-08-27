@@ -86,33 +86,10 @@ const handleMaxBet = () => {
 .button-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
   gap: 5px;
   padding: 10px;
 }
-
-/* .controls button {
-  padding: 15px;
-  font-size: 1.2em;
-  font-weight: bold;
-  cursor: pointer;
-  border: 2px solid #ffc107;
-  border-radius: 8px;
-  transition: all 0.2s;
-  background-color: #2c3e50;
-  color: #ffc107;
-}
-
-.controls button:hover:not(:disabled) {
-  background-color: #ffc107;
-  color: #2c3e50;
-}
-
-.controls button:disabled {
-  background-color: #1a1a1a;
-  border-color: #666;
-  color: #666;
-  cursor: not-allowed;
-} */
 
 .controls button {
   --size: 96px; /* розмір кнопки */
@@ -143,9 +120,9 @@ const handleMaxBet = () => {
   transition: transform .1s, box-shadow .2s, filter .2s;
 }
 
-.controls button::before {}
-
-.controls button:hover:not(:disabled) {}
+.controls button:hover:not(:disabled) {
+  background: #fff6a0;
+}
 
 .controls button:active {
   transform: translateY(3px);
