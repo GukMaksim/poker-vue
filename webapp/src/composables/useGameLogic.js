@@ -56,11 +56,9 @@ export function useGameLogic(
       }
     });
 
-    // Анімація заміни карт
+    // Анімація заміни карт: така ж, як початкова роздача
     const animationPromises = cardsToReplace.map((index, delay) =>
-      animateCardFlip(index, delay * 300).then(() => {
-        hand[index] = currentDeck.shift();
-      })
+      animateCardReveal(index, currentDeck.shift(), delay * 300)
     );
 
     await Promise.all(animationPromises);
@@ -73,7 +71,7 @@ export function useGameLogic(
     // Перевірка результату
     const result = evaluateHand(hand);
     if (result) {
-      const payout = PAYOUTS[result] * GAME_CONSTANTS.BET_AMOUNT;
+      const payout = PAYOUTS[result] * betAmount.value;
       currentWinnings.value = payout;
       message.value = `${result}`;
       gameState.value = GAME_CONSTANTS.GAME_STATES.WON;

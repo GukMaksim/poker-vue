@@ -10,8 +10,10 @@
 
     <BalanceDisplay :balance="balance" :current-winnings="currentWinnings" :bet-amount="betAmount" />
 
-    <GameControls :game-state="gameState" :current-winnings="currentWinnings" @deal-draw="handleDealDraw"
+    <GameControls :game-state="gameState" :current-winnings="currentWinnings" @deal-draw="handleDealDrawOrTake"
       @double="handleDouble" @bet-one="handleBetOne" @max-bet="handleMaxBet" />
+      
+    <Advertising />
   </div>
 </template>
 
@@ -32,6 +34,7 @@ import { ref } from 'vue';
 import { useCardLogic } from './composables/useCardLogic.js';
 import { useGameLogic } from './composables/useGameLogic.js';
 import { useDoubleLogic } from './composables/useDoubleLogic.js';
+import Advertising from './components/Advertising.vue';
 
 // Константи для ставок
 const MAX_BET = 10;
@@ -104,7 +107,8 @@ const {
   revealedCard,
   hiddenCards,
   selectedCardIndex,
-  balance
+  balance,
+  animateCardReveal
 );
 
 // Нові методи для управління ставками
@@ -132,6 +136,15 @@ const handleDouble = (action) => {
   } else if (action === 'continue') {
     continueDouble();
   }
+};
+
+// DEAL кнопка у стані double-won працює як TAKE
+const handleDealDrawOrTake = async () => {
+  if (gameState.value === 'double-won' && currentWinnings.value > 0) {
+    collectWinnings();
+    return;
+  }
+  await handleDealDraw();
 };
 
 // Ініціалізація колоди при завантаженні компонента
@@ -165,7 +178,7 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   box-sizing: border-box;
 }
 </style>

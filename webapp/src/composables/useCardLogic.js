@@ -4,7 +4,10 @@ export function useCardLogic(gameState, hand, held, flippingCards, flippedCards)
   // Функції для роботи з картами
   const isCardHidden = (index) => {
     if (gameState.value === GAME_CONSTANTS.GAME_STATES.DOUBLING) {
-      return index !== 0; // Перша карта відкрита, інші закриті
+      if (index === 0) return false;
+      // У режимі подвоєння керуємо прихованістю прапорцем isHidden на самій карті
+      const card = hand[index];
+      return !card || card.isHidden === true;
     }
 
     // Для початкової роздачі показуємо карти як закриті до анімації

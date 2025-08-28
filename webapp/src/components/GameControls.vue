@@ -44,7 +44,7 @@ const emit = defineEmits([
 
 // Вычисляемые свойства для управления состоянием кнопок
 const canDealDraw = computed(() => {
-  return ['ready', 'dealt', 'finished'].includes(props.gameState);
+  return ['ready', 'dealt', 'finished', 'double-won'].includes(props.gameState);
 });
 
 const canDouble = computed(() => {
@@ -57,6 +57,7 @@ const canChangeBet = computed(() => {
 
 const dealDrawButtonText = computed(() => {
   if (props.gameState === 'dealt') return 'DRAW';
+  if (props.gameState === 'double-won' && props.currentWinnings > 0) return 'TAKE';
   return 'DEAL';
 });
 
@@ -92,7 +93,7 @@ const handleMaxBet = () => {
 }
 
 .controls button {
-  --size: 96px; /* розмір кнопки */
+  --size: 80px; /* розмір кнопки */
   --face: #f4f4f4; /* колір верхньої панелі */
   --border: #111; /* корпус */
   --shadow: #444; /* тінь */
@@ -104,7 +105,7 @@ const handleMaxBet = () => {
   display: grid;
   place-items: center;
 
-  font: bold 18px/1.2 Arial, sans-serif;
+  font: bold 14px/1.2 Arial, sans-serif;
   text-transform: uppercase;
   color: var(--text);
 
@@ -114,14 +115,14 @@ const handleMaxBet = () => {
   box-shadow:
     0 2px 0 var(--shadow) inset,
     0 6px 10px rgba(0, 0, 0, 0.6),
-    0 0 12px 2px var(--glow);
+    0 0 12px 2px var(--glow) inset;
   cursor: pointer;
   user-select: none;
   transition: transform .1s, box-shadow .2s, filter .2s;
 }
 
 .controls button:hover:not(:disabled) {
-  background: #fff6a0;
+  /* background: #fff6a0; */
 }
 
 .controls button:active {
@@ -129,7 +130,7 @@ const handleMaxBet = () => {
   box-shadow:
     0 1px 0 var(--shadow) inset,
     0 3px 6px rgba(0, 0, 0, 0.6),
-    0 0 6px 1px var(--glow);
+    0 0 6px 1px var(--glow) inset;
 }
 
 .controls button:disabled {

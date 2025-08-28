@@ -15,7 +15,7 @@ defineProps({
 
 <style scoped>
 .message-board {
-  padding: 15px;
+  /* padding: 15px; */
   text-align: center;
   color: red;
   font-size: 2em;
