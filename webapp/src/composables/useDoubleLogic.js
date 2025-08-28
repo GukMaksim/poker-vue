@@ -10,10 +10,15 @@ export function useDoubleLogic(
   hiddenCards, 
   selectedCardIndex,
   balance,
-  animateCardReveal
+  animateDoubleUp,
+  animateCardSelection,
+  animateWinEffect,
+  animateLoseEffect,
+  animateTieEffect,
+  animateShowOtherCards
 ) {
   
-  const startDouble = () => {
+  const startDouble = async () => {
     // Створюємо нову колоду для подвоєння
     const newDeck = shuffleDeck(createDeck());
 
@@ -23,14 +28,26 @@ export function useDoubleLogic(
     // Інші 4 карти закриті
     hiddenCards.value = newDeck.slice(1, 5);
 
-    // Оновлюємо руку (1-а відкрита, інші приховані)
-    hand[0] = { ...revealedCard.value, isHidden: false };
-    for (let i = 1; i < 5; i++) {
-      hand[i] = { ...hiddenCards.value[i - 1], isHidden: true };
-    }
+    // Підготовка карт для подвоєння
+    const doubleCards = [
+      { ...revealedCard.value, isHidden: false },
+      { ...hiddenCards.value[0], isHidden: true },
+      { ...hiddenCards.value[1], isHidden: true },
+      { ...hiddenCards.value[2], isHidden: true },
+      { ...hiddenCards.value[3], isHidden: true }
+    ];
+
+    // Оновлюємо руку
+    hand[0] = doubleCards[0];
+    hand[1] = doubleCards[1];
+    hand[2] = doubleCards[2];
+    hand[3] = doubleCards[3];
+    hand[4] = doubleCards[4];
 
     gameState.value = GAME_CONSTANTS.GAME_STATES.DOUBLING;
-    // message.value = `choose a card higher than ${revealedCard.value.rank}`;
+    
+    // Уніфікована анімація появи карт для подвоєння
+    // await animateDoubleUp(doubleCards);
   };
 
   const selectCard = async (index) => {
@@ -39,8 +56,8 @@ export function useDoubleLogic(
     selectedCardIndex.value = index;
     const selectedCard = hand[index];
 
-    // 1) Відкриваємо обрану карту з анімацією
-    await animateCardReveal(index, { ...selectedCard, isHidden: false }, 0);
+    // 1) Уніфікована анімація вибору карти
+    await animateCardSelection(index, selectedCard);
 
     // 2) Порівнюємо після відкриття
     const comparison = compareCards(selectedCard, revealedCard.value);
@@ -50,48 +67,52 @@ export function useDoubleLogic(
       currentWinnings.value *= 2;
       message.value = `YOU WIN ${currentWinnings.value} !`;
 
+      // Уніфікована анімація ефекту виграшу
+      // await animateWinEffect(index);
+
       // Переходимо до стану вибору дії
       gameState.value = GAME_CONSTANTS.GAME_STATES.DOUBLE_WON;
 
       // Пропонуємо подвоїти ще раз або забрати
       setTimeout(() => {
-        message.value = `Double to ${currentWinnings.value * 2} ?`;
+        message.value = `YOU WIN! Double to ${currentWinnings.value * 2} or TAKE?`;
       }, 2000);
 
     } else if (comparison < 0) {
       // Програш - втрачаємо все
       currentWinnings.value = 0;
       message.value = `YOU LOSE`;
+      
+      // Уніфікована анімація ефекту програшу
+      // await animateLoseEffect(index);
+      
       gameState.value = GAME_CONSTANTS.GAME_STATES.READY;
 
     } else {
       // Нічия - залишаємо поточний виграш
-      // message.value = `Нічия! ${selectedCard.rank}${selectedCard.suit} дорівнює ${revealedCard.value.rank}${revealedCard.value.suit}. Виграш залишається: $${currentWinnings.value}`;
-
+      // Уніфікована анімація ефекту нічиї
+      await animateTieEffect(index);
+      
       setTimeout(() => {
         gameState.value = GAME_CONSTANTS.GAME_STATES.DOUBLE_WON;
         hand.fill(null);
-        message.value = `Double to ${currentWinnings.value * 2}?`;
+        message.value = `TIE! Double to ${currentWinnings.value * 2} or TAKE?`;
       }, 2000);
     }
 
-    // 3) Показуємо інші карти по черзі для наочності (анімовано)
-    const order = [1, 2, 3, 4].filter((i) => i !== index);
-    for (let step = 0; step < order.length; step++) {
-      const idx = order[step];
-      const cardToReveal = { ...hand[idx], isHidden: false };
-      await animateCardReveal(idx, cardToReveal, step * 50);
-    }
+    // 3) Уніфікована анімація показу інших карт
+    // const order = [1, 2, 3, 4].filter((i) => i !== index);
+    // await animateShowOtherCards(order, hand);
   };
 
   const collectWinnings = () => {
     balance.value += currentWinnings.value;
-    message.value = `Виграш $${currentWinnings.value} додано до балансу!`;
 
     setTimeout(() => {
       gameState.value = GAME_CONSTANTS.GAME_STATES.READY;
       hand.fill(null);
       currentWinnings.value = 0;
+      winningCombo.value = null;
       message.value = 'press DEAL to start';
     }, 100);
   };
@@ -106,15 +127,27 @@ export function useDoubleLogic(
     // Інші 4 карти закриті
     hiddenCards.value = newDeck.slice(1, 5);
 
-    // Оновлюємо руку (1-а відкрита, інші приховані)
-    hand[0] = { ...revealedCard.value, isHidden: false };
-    hand[1] = { ...hiddenCards.value[0], isHidden: true };
-    hand[2] = { ...hiddenCards.value[1], isHidden: true };
-    hand[3] = { ...hiddenCards.value[2], isHidden: true };
-    hand[4] = { ...hiddenCards.value[3], isHidden: true };
+    // Підготовка карт для подвоєння
+    const doubleCards = [
+      { ...revealedCard.value, isHidden: false },
+      { ...hiddenCards.value[0], isHidden: true },
+      { ...hiddenCards.value[1], isHidden: true },
+      { ...hiddenCards.value[2], isHidden: true },
+      { ...hiddenCards.value[3], isHidden: true }
+    ];
 
-    // Повертаємося до стану подвоєння (відкриватимемо після вибору гравця)
+    // Оновлюємо руку
+    hand[0] = doubleCards[0];
+    hand[1] = doubleCards[1];
+    hand[2] = doubleCards[2];
+    hand[3] = doubleCards[3];
+    hand[4] = doubleCards[4];
+
+    // Повертаємося до стану подвоєння
     gameState.value = GAME_CONSTANTS.GAME_STATES.DOUBLING;
+    
+    // Уніфікована анімація появи нових карт для подвоєння
+    await animateDoubleUp(doubleCards);
   };
 
   return {

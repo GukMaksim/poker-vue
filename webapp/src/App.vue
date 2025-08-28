@@ -11,7 +11,7 @@
     <BalanceDisplay :balance="balance" :current-winnings="currentWinnings" :bet-amount="betAmount" />
 
     <GameControls :game-state="gameState" :current-winnings="currentWinnings" @deal-draw="handleDealDrawOrTake"
-      @double="handleDouble" @bet-one="handleBetOne" @max-bet="handleMaxBet" />
+      @double="handleDouble" @bet-one="handleBetOne" />
       
     <Advertising />
   </div>
@@ -73,7 +73,16 @@ const {
   isCardFlipped,
   toggleHold,
   animateCardFlip,
-  animateCardReveal
+  animateCardReveal,
+  animateDeal,
+  animateDraw,
+  animateDoubleUp,
+  animateCardSelection,
+  animateWinEffect,
+  animateLoseEffect,
+  animateTieEffect,
+  animateShowOtherCards,
+  ANIMATION_CONSTANTS
 } = useCardLogic(gameState, hand, held, flippingCards, flippedCards);
 
 // Основна логіка гри
@@ -88,8 +97,8 @@ const {
   message,
   winningCombo,
   currentWinnings,
-  animateCardReveal,
-  animateCardFlip,
+  animateDeal,
+  animateDraw,
   betAmount
 );
 
@@ -108,7 +117,12 @@ const {
   hiddenCards,
   selectedCardIndex,
   balance,
-  animateCardReveal
+  animateDoubleUp,
+  animateCardSelection,
+  animateWinEffect,
+  animateLoseEffect,
+  animateTieEffect,
+  animateShowOtherCards
 );
 
 // Нові методи для управління ставками
@@ -130,17 +144,17 @@ const handleMaxBet = () => {
 };
 
 // Оновлений метод для обробки подвоєння
-const handleDouble = (action) => {
+const handleDouble = async (action) => {
   if (action === 'start') {
-    startDouble();
+    await startDouble();
   } else if (action === 'continue') {
-    continueDouble();
+    await continueDouble();
   }
 };
 
 // DEAL кнопка у стані double-won працює як TAKE
 const handleDealDrawOrTake = async () => {
-  if (gameState.value === 'double-won' && currentWinnings.value > 0) {
+  if ((gameState.value === 'double-won' && currentWinnings.value > 0) || gameState.value === 'won') {
     collectWinnings();
     return;
   }

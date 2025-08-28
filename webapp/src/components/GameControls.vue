@@ -1,20 +1,20 @@
 <template>
   <div class="controls">
     <div class="button-grid">
-      <button @click="handleDealDraw" :disabled="!canDealDraw" class="main-button">
-        {{ dealDrawButtonText }}
+      <button disabled>
+        MENU
       </button>
-
+      
+      <button @click="handleBetOne" :disabled="!canChangeBet" class="bet-button">
+        BET ONE
+      </button>
+     
       <button @click="handleDouble" :disabled="!canDouble" class="double-button">
         DOUBLE UP
       </button>
 
-      <button @click="handleBetOne" :disabled="!canChangeBet" class="bet-button">
-        BET ONE
-      </button>
-
-      <button @click="handleMaxBet" :disabled="!canChangeBet" class="bet-button">
-        MAX BET
+      <button @click="handleDealDraw" :disabled="!canDealDraw" class="main-button">
+        {{ dealDrawButtonText }}
       </button>
     </div>
   </div>
@@ -38,13 +38,12 @@ const props = defineProps({
 const emit = defineEmits([
   'deal-draw',
   'double',
-  'bet-one',
-  'max-bet'
+  'bet-one'
 ]);
 
 // Вычисляемые свойства для управления состоянием кнопок
 const canDealDraw = computed(() => {
-  return ['ready', 'dealt', 'finished', 'double-won'].includes(props.gameState);
+  return ['ready', 'dealt', 'finished', 'won', 'double-won'].includes(props.gameState);
 });
 
 const canDouble = computed(() => {
@@ -57,6 +56,7 @@ const canChangeBet = computed(() => {
 
 const dealDrawButtonText = computed(() => {
   if (props.gameState === 'dealt') return 'DRAW';
+  if (props.gameState === 'won') return 'TAKE';
   if (props.gameState === 'double-won' && props.currentWinnings > 0) return 'TAKE';
   return 'DEAL';
 });
@@ -78,9 +78,6 @@ const handleBetOne = () => {
   emit('bet-one');
 };
 
-const handleMaxBet = () => {
-  emit('max-bet');
-};
 </script>
 
 <style scoped>

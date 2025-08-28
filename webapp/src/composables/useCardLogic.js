@@ -1,6 +1,22 @@
 import { GAME_CONSTANTS } from './useGameState.js';
+import { useCardAnimation } from './useCardAnimation.js';
 
 export function useCardLogic(gameState, hand, held, flippingCards, flippedCards) {
+  // Ініціалізуємо уніфіковану систему анімації
+  const {
+    animateCardFlip,
+    animateCardReveal,
+    animateDeal,
+    animateDraw,
+    animateDoubleUp,
+    animateCardSelection,
+    animateWinEffect,
+    animateLoseEffect,
+    animateTieEffect,
+    animateShowOtherCards,
+    ANIMATION_CONSTANTS
+  } = useCardAnimation(flippingCards, flippedCards, hand);
+
   // Функції для роботи з картами
   const isCardHidden = (index) => {
     if (gameState.value === GAME_CONSTANTS.GAME_STATES.DOUBLING) {
@@ -35,51 +51,27 @@ export function useCardLogic(gameState, hand, held, flippingCards, flippedCards)
     held[index] = !held[index];
   };
 
-  // Функції для анімації карт
-  const animateCardFlip = (index, delay = 0) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        flippingCards.value.add(index);
-
-        setTimeout(() => {
-          flippingCards.value.delete(index);
-          flippedCards.value.add(index);
-
-          setTimeout(() => {
-            flippedCards.value.delete(index);
-            resolve();
-          }, 100);
-        }, 300);
-      }, delay);
-    });
-  };
-
-  const animateCardReveal = (index, card, delay = 0) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        flippingCards.value.add(index);
-
-        setTimeout(() => {
-          flippingCards.value.delete(index);
-          flippedCards.value.add(index);
-          hand[index] = card;
-
-          setTimeout(() => {
-            flippedCards.value.delete(index);
-            resolve();
-          }, 100);
-        }, 300);
-      }, delay);
-    });
-  };
-
   return {
+    // Функції для роботи з картами
     isCardHidden,
     isCardSelectable,
     isCardFlipping,
     isCardFlipped,
     toggleHold,
+    
+    // Уніфіковані функції анімації
     animateCardFlip,
-    animateCardReveal
+    animateCardReveal,
+    animateDeal,
+    animateDraw,
+    animateDoubleUp,
+    animateCardSelection,
+    animateWinEffect,
+    animateLoseEffect,
+    animateTieEffect,
+    animateShowOtherCards,
+    
+    // Константи для налаштування
+    ANIMATION_CONSTANTS
   };
 } 

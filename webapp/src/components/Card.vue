@@ -85,12 +85,23 @@ const handleClick = () => {
   width: 100%;
   height: 100%;
   text-align: left;
-  transition: transform 0.6s;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
 .card-flipping .card-inner {
   transform: rotateY(180deg);
+}
+
+/* Додаткові ефекти для різних типів анімації */
+.card-flipping {
+  animation: cardShake 0.3s ease-in-out;
+}
+
+@keyframes cardShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
 }
 
 .card-front, .card-back {
@@ -113,13 +124,12 @@ const handleClick = () => {
   height: 100%;
   align-items: center;
   justify-content: center;
-  color: #000000;
+  /* color: #000000; */
 }
 
 .card.held {
   position: relative;
   border: 1px solid #ffc107;
-  /* transform: translateY(-10px); */
   box-shadow: 0px 10px 15px rgba(255, 193, 7, 0.4);
   background-color: #ededc9;
 }
@@ -145,7 +155,6 @@ const handleClick = () => {
 }
 
 .card.card-selectable:hover {
-  /* transform: translateY(-8px); */
   box-shadow: 0px 10px 10px rgb(255 193 7);
 }
 

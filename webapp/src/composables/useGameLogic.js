@@ -10,8 +10,8 @@ export function useGameLogic(
   message,
   winningCombo,
   currentWinnings,
-  animateCardReveal,
-  animateCardFlip,
+  animateDeal,
+  animateDraw,
   betAmount
 ) {
 
@@ -36,12 +36,8 @@ export function useGameLogic(
     gameState.value = GAME_CONSTANTS.GAME_STATES.DEALT;
     message.value = 'dealing cards...';
 
-    // Анімація відкриття карт по черзі
-    const animationPromises = newHand.map((card, index) =>
-      animateCardReveal(index, card, index * 300)
-    );
-
-    await Promise.all(animationPromises);
+    // Уніфікована анімація роздачі карт
+    await animateDeal(newHand);
     message.value = 'Choose cards to hold';
   };
 
@@ -56,12 +52,11 @@ export function useGameLogic(
       }
     });
 
-    // Анімація заміни карт: така ж, як початкова роздача
-    const animationPromises = cardsToReplace.map((index, delay) =>
-      animateCardReveal(index, currentDeck.shift(), delay * 300)
-    );
+    // Підготовка нових карт для заміни
+    const newCards = cardsToReplace.map(() => currentDeck.shift());
 
-    await Promise.all(animationPromises);
+    // Уніфікована анімація заміни карт
+    await animateDraw(cardsToReplace, newCards);
     deck.value = currentDeck;
 
     // Скидаємо статус held та перевіряємо результат
@@ -97,6 +92,10 @@ export function useGameLogic(
         break;
       case GAME_CONSTANTS.GAME_STATES.FINISHED:
         await dealInitialHand();
+        break;
+      case GAME_CONSTANTS.GAME_STATES.WON:
+        // У стані WON кнопка DEAL працює як TAKE
+        // Ця логіка обробляється в App.vue через handleDealDrawOrTake
         break;
     }
   };
