@@ -10,6 +10,7 @@
 
 <style scoped>
 .adv-container {
+  margin-top: 20px;
   height: 120px;
   background: blue;
   /* margin-bottom: 20px; */

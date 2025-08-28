@@ -1,21 +1,29 @@
 <template>
   <div class="controls">
     <div class="button-grid">
-      <button disabled>
-        MENU
-      </button>
-      
-      <button @click="handleBetOne" :disabled="!canChangeBet" class="bet-button">
-        BET ONE
-      </button>
-     
-      <button @click="handleDouble" :disabled="!canDouble" class="double-button">
-        DOUBLE UP
-      </button>
+      <div class="button-frame">
+        <button disabled>
+          MENU
+        </button>
+      </div>
 
-      <button @click="handleDealDraw" :disabled="!canDealDraw" class="main-button">
-        {{ dealDrawButtonText }}
-      </button>
+      <div class="button-frame">
+        <button @click="handleBetOne" :disabled="!canChangeBet" class="bet-button">
+          BET ONE
+        </button>
+      </div>
+
+      <div class="button-frame">
+        <button @click="handleDouble" :disabled="!canDouble" class="double-button">
+          DOUBLE UP
+        </button>
+      </div>
+
+      <div class="button-frame">
+        <button @click="handleDealDraw" :disabled="!canDealDraw" class="main-button">
+          {{ dealDrawButtonText }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -89,59 +97,78 @@ const handleBetOne = () => {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
-  gap: 5px;
-  padding: 10px;
+  gap: 1px;
+  /* padding: 10px; */
+}
+
+.button-frame {
+  --size: 76px;
+  --border: #95949441;
+
+  inline-size: var(--size);
+  aspect-ratio: 1/1;
+  display: grid;
+  place-items: center;
+  border: 6px solid var(--border);
+  border-radius: 12px;
+  background: #111; 
+  /* чорна основа */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+  position: relative;
+  overflow: hidden;
 }
 
 .controls button {
-  --size: 80px; /* розмір кнопки */
-  --face: #f4f4f4; /* колір верхньої панелі */
-  --border: #111; /* корпус */
-  --shadow: #444; /* тінь */
-  --text: #111; /* напис */
-  --glow: #ffed4d; /* підсвітка */
+  --face: #f4f4f4;        /* жовта поверхня */
+  --face-light: #ffed4d;  /* світліший відтінок */
+  --text: #222;           /* текст */
 
-  inline-size: var(--size);
-  aspect-ratio: 1 / 1;
+  inline-size: 100%;
+  block-size: 100%;
   display: grid;
   place-items: center;
 
-  font: bold 14px/1.2 Arial, sans-serif;
-  text-transform: uppercase;
+  font: bold 16px/1 Arial, sans-serif;
   color: var(--text);
+  text-transform: uppercase;
+  /* letter-spacing: 1px; */
 
-  background: var(--face);
-  border: 4px solid var(--border);
+  background: radial-gradient(circle at 30% 30%, var(--face-light), var(--face));
+  border: none;
   border-radius: 6px;
-  box-shadow:
-    0 2px 0 var(--shadow) inset,
-    0 6px 10px rgba(0, 0, 0, 0.6),
-    0 0 12px 2px var(--glow) inset;
   cursor: pointer;
-  user-select: none;
-  transition: transform .1s, box-shadow .2s, filter .2s;
+
+  box-shadow:
+    inset -6px -6px 12px rgba(0,0,0,0.25),
+    inset 4px 4px 8px rgba(255,255,255,0.4);
+
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
 }
 
-.controls button:hover:not(:disabled) {
-  /* background: #fff6a0; */
+.controls button:before {
+  content: "";
+  position: absolute;
+  inset: 8% 8% auto 8%;
+  height: 30%;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  pointer-events: none;
 }
 
 .controls button:active {
-  transform: translateY(3px);
+  transform: translateY(6px);
   box-shadow:
-    0 1px 0 var(--shadow) inset,
-    0 3px 6px rgba(0, 0, 0, 0.6),
-    0 0 6px 1px var(--glow) inset;
+    inset -4px -4px 8px rgba(0,0,0,0.35),
+    inset 2px 2px 6px rgba(255,255,255,0.25);
 }
 
 .controls button:disabled {
-  background: #bbb;
+  background: radial-gradient(circle at 30% 30%, #ddd, #aaa);
   color: #666;
-  border-color: #444;
   cursor: not-allowed;
   box-shadow:
-    0 2px 0 #555 inset,
-    0 4px 6px rgba(0, 0, 0, 0.5);
-  filter: grayscale(0.5) brightness(0.9);
+    inset -3px -3px 6px rgba(0,0,0,0.3),
+    inset 2px 2px 4px rgba(255,255,255,0.1);
 }
 </style>
