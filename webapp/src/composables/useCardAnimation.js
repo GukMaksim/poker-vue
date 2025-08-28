@@ -11,7 +11,7 @@ export const ANIMATION_CONSTANTS = {
   TIE_FLIP_DELAY: 300    // Затримка для нічиї (ms)
 };
 
-export function useCardAnimation(flippingCards, flippedCards, hand) {
+export function useCardAnimation(flippingCards, flippedCards, hand, isAnimating) {
   
   /**
    * Уніфікована функція для перевертання карти
@@ -69,10 +69,12 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення всіх анімацій
    */
   const animateDeal = async (newHand) => {
+    isAnimating.value = true;
     const animationPromises = newHand.map((card, index) =>
       animateCardReveal(index, card, index * ANIMATION_CONSTANTS.DEAL_DELAY)
     );
     await Promise.all(animationPromises);
+    isAnimating.value = false;
   };
 
   /**
@@ -82,10 +84,12 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення всіх анімацій
    */
   const animateDraw = async (cardsToReplace, newCards) => {
+    isAnimating.value = true;
     const animationPromises = cardsToReplace.map((index, delay) =>
       animateCardReveal(index, newCards[delay], delay * ANIMATION_CONSTANTS.DRAW_DELAY)
     );
     await Promise.all(animationPromises);
+    isAnimating.value = false;
   };
 
   /**
@@ -94,6 +98,7 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення всіх анімацій
    */
   const animateDoubleUp = async (doubleCards) => {
+    isAnimating.value = true;
     // Перша карта відкрита одразу
     await animateCardReveal(0, doubleCards[0], 0);
     
@@ -101,6 +106,7 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
     for (let i = 1; i < 5; i++) {
       await animateCardReveal(i, doubleCards[i], i * ANIMATION_CONSTANTS.DOUBLE_DELAY);
     }
+    isAnimating.value = false;
   };
 
   /**
@@ -110,7 +116,9 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення анімації
    */
   const animateCardSelection = async (index, selectedCard) => {
+    isAnimating.value = true;
     await animateCardReveal(index, { ...selectedCard, isHidden: false }, 0);
+    isAnimating.value = false;
   };
 
   /**
@@ -119,7 +127,9 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення анімації
    */
   const animateWinEffect = async (index) => {
+    isAnimating.value = true;
     await animateCardFlip(index, ANIMATION_CONSTANTS.EXTRA_FLIP_DELAY);
+    isAnimating.value = false;
   };
 
   /**
@@ -128,7 +138,9 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення анімації
    */
   const animateLoseEffect = async (index) => {
+    isAnimating.value = true;
     await animateCardFlip(index, ANIMATION_CONSTANTS.EXTRA_FLIP_DELAY);
+    isAnimating.value = false;
   };
 
   /**
@@ -137,7 +149,9 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення анімації
    */
   const animateTieEffect = async (index) => {
+    isAnimating.value = true;
     await animateCardFlip(index, ANIMATION_CONSTANTS.TIE_FLIP_DELAY);
+    isAnimating.value = false;
   };
 
   /**
@@ -147,11 +161,13 @@ export function useCardAnimation(flippingCards, flippedCards, hand) {
    * @returns {Promise} - Promise, який вирішується після завершення всіх анімацій
    */
   const animateShowOtherCards = async (order, hand) => {
+    isAnimating.value = true;
     for (let step = 0; step < order.length; step++) {
       const idx = order[step];
       const cardToReveal = { ...hand[idx], isHidden: false };
       await animateCardReveal(idx, cardToReveal, step * 100);
     }
+    isAnimating.value = false;
   };
 
   return {

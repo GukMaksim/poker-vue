@@ -33,6 +33,7 @@ export function useGameState() {
   // Стан для анімації карт
   const flippingCards = ref(new Set());
   const flippedCards = ref(new Set());
+  const isAnimating = ref(false); // Новий стан для відстеження анімації
 
   // Обчислювані властивості
   const isDrawButtonDisabled = computed(() => {
@@ -55,6 +56,7 @@ export function useGameState() {
     held.fill(false);
     flippingCards.value.clear();
     flippedCards.value.clear();
+    isAnimating.value = false;
     winningCombo.value = null;
     currentWinnings.value = 0;
     message.value = 'press DEAL to start';
@@ -65,6 +67,7 @@ export function useGameState() {
     held.fill(false);
     flippingCards.value.clear();
     flippedCards.value.clear();
+    isAnimating.value = false;
   };
 
   return {
@@ -82,6 +85,7 @@ export function useGameState() {
     selectedCardIndex,
     flippingCards,
     flippedCards,
+    isAnimating,
     
     // Обчислювані властивості
     isDrawButtonDisabled,

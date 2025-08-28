@@ -32,6 +32,10 @@ const props = defineProps({
   currentWinnings: {
     type: Number,
     default: 0
+  },
+  isAnimating: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -43,15 +47,15 @@ const emit = defineEmits([
 
 // Вычисляемые свойства для управления состоянием кнопок
 const canDealDraw = computed(() => {
-  return ['ready', 'dealt', 'finished', 'won', 'double-won'].includes(props.gameState);
+  return ['ready', 'dealt', 'finished', 'won', 'double-won'].includes(props.gameState) && !props.isAnimating;
 });
 
 const canDouble = computed(() => {
-  return ['won', 'double-won'].includes(props.gameState) && props.currentWinnings > 0;
+  return ['won', 'double-won'].includes(props.gameState) && props.currentWinnings > 0 && !props.isAnimating;
 });
 
 const canChangeBet = computed(() => {
-  return ['ready', 'finished'].includes(props.gameState);
+  return ['ready', 'finished'].includes(props.gameState) && !props.isAnimating;
 });
 
 const dealDrawButtonText = computed(() => {

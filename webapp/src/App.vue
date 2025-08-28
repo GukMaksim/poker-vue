@@ -10,7 +10,7 @@
 
     <BalanceDisplay :balance="balance" :current-winnings="currentWinnings" :bet-amount="betAmount" />
 
-    <GameControls :game-state="gameState" :current-winnings="currentWinnings" @deal-draw="handleDealDrawOrTake"
+    <GameControls :game-state="gameState" :current-winnings="currentWinnings" :is-animating="isAnimating" @deal-draw="handleDealDrawOrTake"
       @double="handleDouble" @bet-one="handleBetOne" />
       
     <Advertising />
@@ -58,6 +58,7 @@ const {
   selectedCardIndex,
   flippingCards,
   flippedCards,
+  isAnimating,
   isDrawButtonDisabled,
   canToggleHold,
   isInDoublingMode,
@@ -83,7 +84,7 @@ const {
   animateTieEffect,
   animateShowOtherCards,
   ANIMATION_CONSTANTS
-} = useCardLogic(gameState, hand, held, flippingCards, flippedCards);
+} = useCardLogic(gameState, hand, held, flippingCards, flippedCards, isAnimating);
 
 // Основна логіка гри
 const {

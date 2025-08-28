@@ -1,7 +1,7 @@
 import { GAME_CONSTANTS } from './useGameState.js';
 import { useCardAnimation } from './useCardAnimation.js';
 
-export function useCardLogic(gameState, hand, held, flippingCards, flippedCards) {
+export function useCardLogic(gameState, hand, held, flippingCards, flippedCards, isAnimating) {
   // Ініціалізуємо уніфіковану систему анімації
   const {
     animateCardFlip,
@@ -15,7 +15,7 @@ export function useCardLogic(gameState, hand, held, flippingCards, flippedCards)
     animateTieEffect,
     animateShowOtherCards,
     ANIMATION_CONSTANTS
-  } = useCardAnimation(flippingCards, flippedCards, hand);
+  } = useCardAnimation(flippingCards, flippedCards, hand, isAnimating);
 
   // Функції для роботи з картами
   const isCardHidden = (index) => {
