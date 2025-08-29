@@ -21,6 +21,6 @@ defineProps({
   font-size: 2em;
   font-weight: bold;
   text-shadow: -2px -2px 0 #ffc107, 2px -2px 0 #ffc107, -2px 2px 0 #ffc107, 2px 2px 0 #ffc107;
-  min-height: 50px;
+  min-height: 60px;
 }
 </style> 

@@ -75,7 +75,7 @@ export function useDoubleLogic(
 
       // Пропонуємо подвоїти ще раз або забрати
       setTimeout(() => {
-        message.value = `YOU WIN! Double to ${currentWinnings.value * 2} or TAKE?`;
+        message.value = `Double to ${currentWinnings.value * 2} ?`;
       }, 2000);
 
     } else if (comparison < 0) {
@@ -91,12 +91,12 @@ export function useDoubleLogic(
     } else {
       // Нічия - залишаємо поточний виграш
       // Уніфікована анімація ефекту нічиї
-      await animateTieEffect(index);
+      // await animateTieEffect(index);
       
       setTimeout(() => {
         gameState.value = GAME_CONSTANTS.GAME_STATES.DOUBLE_WON;
         hand.fill(null);
-        message.value = `TIE! Double to ${currentWinnings.value * 2} or TAKE?`;
+        message.value = `TIE! Double to ${currentWinnings.value * 2} ?`;
       }, 2000);
     }
 
@@ -147,7 +147,7 @@ export function useDoubleLogic(
     gameState.value = GAME_CONSTANTS.GAME_STATES.DOUBLING;
     
     // Уніфікована анімація появи нових карт для подвоєння
-    await animateDoubleUp(doubleCards);
+    // await animateDoubleUp(doubleCards);
   };
 
   return {

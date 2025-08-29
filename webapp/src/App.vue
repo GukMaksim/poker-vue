@@ -188,7 +188,7 @@ body {
   max-width: 500px;
   height: 100vh;
   background-color: #0025aa;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   padding: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;

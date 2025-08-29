@@ -98,7 +98,10 @@ const handleBetOne = () => {
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
   gap: 1px;
-  /* padding: 10px; */
+  padding: 10px 4px;
+  background: gray;
+  border-radius: 10px;
+  box-shadow: inset -3px -3px 6px rgba(0, 0, 0, 0.3), inset 2px 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 .button-frame {
@@ -109,7 +112,7 @@ const handleBetOne = () => {
   aspect-ratio: 1/1;
   display: grid;
   place-items: center;
-  border: 6px solid var(--border);
+  border: 4px solid var(--border);
   border-radius: 12px;
   background: #111; 
   /* чорна основа */

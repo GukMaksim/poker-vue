@@ -72,6 +72,7 @@ const selectCard = (index) => {
   background-size: cover;
   width: 80px;
   height: 15vh;
+  border-radius: 8px;
   align-items: center;
   justify-content: center;
   color: #000000;
